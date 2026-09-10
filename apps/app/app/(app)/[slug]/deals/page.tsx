@@ -19,10 +19,7 @@ import { DEALS_BOARD_INPUT } from "./deals-board-input";
 import { dealsSearchParams } from "./deals-search-params";
 import { DealsTable } from "./deals-table";
 import { loadDealViewSearchParams } from "./deals-view-search-params";
-import {
-	DealsViewToggle,
-	DealsViewToggleFallback,
-} from "./deals-view-toggle";
+import { DealsViewToggle, DealsViewToggleFallback } from "./deals-view-toggle";
 
 export const metadata: Metadata = {
 	title: "Deals",

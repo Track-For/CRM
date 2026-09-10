@@ -56,7 +56,11 @@ export function useDealStageChange() {
 	const [, setCloseParams] = useQueryStates(closeReasonParams);
 	const setStage = useStageMutation();
 
-	const change = (dealId: string, currentStage: DealStage, nextStage: DealStage) => {
+	const change = (
+		dealId: string,
+		currentStage: DealStage,
+		nextStage: DealStage,
+	) => {
 		if (nextStage === currentStage) return;
 		if (LOSING_STAGES.includes(nextStage)) {
 			void setCloseParams({
