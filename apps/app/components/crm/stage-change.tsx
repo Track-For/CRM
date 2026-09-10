@@ -52,6 +52,25 @@ function useStageMutation(onDone?: () => void) {
 	);
 }
 
+export function useDealStageChange() {
+	const [, setCloseParams] = useQueryStates(closeReasonParams);
+	const setStage = useStageMutation();
+
+	const change = (dealId: string, currentStage: DealStage, nextStage: DealStage) => {
+		if (nextStage === currentStage) return;
+		if (LOSING_STAGES.includes(nextStage)) {
+			void setCloseParams({
+				[SEARCH_PARAM.dialog.closeDeal]: dealId,
+				[SEARCH_PARAM.dialog.closeStage]: nextStage,
+			});
+			return;
+		}
+		setStage.mutate({ id: dealId, stage: nextStage });
+	};
+
+	return { change, pending: setStage.isPending };
+}
+
 export function DealStageMenu({
 	dealId,
 	stage,
@@ -61,8 +80,7 @@ export function DealStageMenu({
 	stage: DealStage;
 	variant?: "inline" | "control";
 }) {
-	const [, setCloseParams] = useQueryStates(closeReasonParams);
-	const setStage = useStageMutation();
+	const { change, pending } = useDealStageChange();
 
 	return (
 		<DropdownMenu>
@@ -71,7 +89,7 @@ export function DealStageMenu({
 					<Button
 						variant="outline"
 						size="sm"
-						disabled={setStage.isPending}
+						disabled={pending}
 						onClick={(event) => event.stopPropagation()}
 					>
 						<DealStageIndicator stage={stage} className="text-foreground" />
@@ -81,7 +99,7 @@ export function DealStageMenu({
 					<button
 						type="button"
 						onClick={(event) => event.stopPropagation()}
-						disabled={setStage.isPending}
+						disabled={pending}
 						className="flex min-w-0 items-center text-left hover:text-foreground disabled:opacity-50"
 					>
 						<DealStageIndicator stage={stage} />
@@ -95,18 +113,7 @@ export function DealStageMenu({
 			>
 				<DropdownMenuRadioGroup
 					value={stage}
-					onValueChange={(next) => {
-						const chosen = next as DealStage;
-						if (chosen === stage) return;
-						if (LOSING_STAGES.includes(chosen)) {
-							void setCloseParams({
-								[SEARCH_PARAM.dialog.closeDeal]: dealId,
-								[SEARCH_PARAM.dialog.closeStage]: chosen,
-							});
-							return;
-						}
-						setStage.mutate({ id: dealId, stage: chosen });
-					}}
+					onValueChange={(next) => change(dealId, stage, next as DealStage)}
 				>
 					{DEAL_STAGE_OPTIONS.map((option) => (
 						<DropdownMenuRadioItem key={option.value} value={option.value}>

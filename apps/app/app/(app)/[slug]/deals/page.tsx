@@ -14,8 +14,15 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { CreateDealSheet } from "./create-deal-sheet";
+import { DealsBoard } from "./deals-board";
+import { DEALS_BOARD_INPUT } from "./deals-board-input";
 import { dealsSearchParams } from "./deals-search-params";
 import { DealsTable } from "./deals-table";
+import { loadDealViewSearchParams } from "./deals-view-search-params";
+import {
+	DealsViewToggle,
+	DealsViewToggleFallback,
+} from "./deals-view-toggle";
 
 export const metadata: Metadata = {
 	title: "Deals",
@@ -34,6 +41,9 @@ export default function DealsPage({
 					</PageShellDescription>
 				</PageShellHeading>
 				<PageShellActions>
+					<Suspense fallback={<DealsViewToggleFallback />}>
+						<DealsViewToggle />
+					</Suspense>
 					<CreateDealSheet />
 				</PageShellActions>
 			</PageShellHeader>
@@ -50,16 +60,19 @@ export default function DealsPage({
 async function Deals({
 	searchParams,
 }: Pick<PageProps<"/[slug]/deals">, "searchParams">) {
-	const [, values] = await Promise.all([
+	const [, values, { view }] = await Promise.all([
 		requireSession(),
 		dealsSearchParams.load(searchParams),
+		loadDealViewSearchParams(searchParams),
 	]);
 
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
 	await Promise.all([
 		queryClient.prefetchQuery(
-			trpc.deals.list.queryOptions(dealsSearchParams.toInput(values)),
+			view === "board"
+				? trpc.deals.list.queryOptions(DEALS_BOARD_INPUT)
+				: trpc.deals.list.queryOptions(dealsSearchParams.toInput(values)),
 		),
 		queryClient.prefetchQuery(trpc.users.list.queryOptions()),
 		queryClient.prefetchQuery(trpc.companies.options.queryOptions({ q: "" })),
@@ -67,7 +80,7 @@ async function Deals({
 
 	return (
 		<HydrateClient>
-			<DealsTable />
+			{view === "board" ? <DealsBoard /> : <DealsTable />}
 		</HydrateClient>
 	);
 }
