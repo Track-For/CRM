@@ -100,14 +100,14 @@ export function EnrichmentQueue() {
 						tone={total > 0 ? "primary" : "neutral"}
 						aria-hidden="true"
 					/>
-					{total > 0 ? `Enriching ${total}` : "Enriching"}
+					{total > 0 ? `Enriquecendo ${total}` : "Enriquecendo"}
 				</Button>
 			</PopoverTrigger>
 
 			<PopoverContent align="end" size="panel">
 				<div className="flex items-center justify-between border-b px-4 py-3">
 					<span className="font-semibold text-popover-foreground text-sm">
-						Enriching now
+						Enriquecendo agora
 					</span>
 					<span className="font-mono text-muted-foreground text-xs">
 						{total}
@@ -117,11 +117,11 @@ export function EnrichmentQueue() {
 				{visible.length === 0 ? (
 					<div className="flex flex-col gap-1 px-6 py-8 text-center">
 						<span className="font-medium text-popover-foreground text-sm">
-							Nothing right now
+							Nada por aqui agora
 						</span>
 						<span className="text-muted-foreground text-xs">
-							New companies and contacts show up here while your agents look
-							them up.
+							Novas empresas e contatos aparecem aqui enquanto seus agentes
+							pesquisam sobre eles.
 						</span>
 					</div>
 				) : (
@@ -135,7 +135,7 @@ export function EnrichmentQueue() {
 				{footer.more > 0 ? (
 					<div className="flex items-center justify-between px-4 py-3 text-xs">
 						<span className="text-muted-foreground">
-							{footer.more} more queued
+							Mais {footer.more} na fila
 						</span>
 						{footer.action === "show-all" ? (
 							<button
@@ -143,7 +143,7 @@ export function EnrichmentQueue() {
 								className="cursor-pointer text-primary"
 								onClick={() => setExpanded(true)}
 							>
-								Show all
+								Mostrar tudo
 							</button>
 						) : null}
 						{footer.action === "load-more" ? (
@@ -156,7 +156,7 @@ export function EnrichmentQueue() {
 									)
 								}
 							>
-								Load more
+								Carregar mais
 							</button>
 						) : null}
 					</div>
@@ -284,10 +284,10 @@ function ScheduledSection({
 			<CollapsibleTrigger className="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-xs hover:bg-muted">
 				<span className="text-muted-foreground">
 					{total === 1
-						? "1 record is booked for a later look"
-						: `${total} records are booked for a later look`}
+						? "1 registro está agendado para uma revisão futura"
+						: `${total} registros estão agendados para uma revisão futura`}
 				</span>
-				<span className="text-primary">{shown ? "Hide" : "Show"}</span>
+				<span className="text-primary">{shown ? "Ocultar" : "Mostrar"}</span>
 			</CollapsibleTrigger>
 
 			<CollapsibleContent className="max-h-60 overflow-y-auto border-t">
@@ -310,7 +310,7 @@ function ScheduledSection({
 
 				{total > rows.length ? (
 					<div className="px-4 py-3 text-muted-foreground text-xs">
-						{total - rows.length} more are booked but not listed here
+						Mais {total - rows.length} estão agendados mas não listados aqui
 					</div>
 				) : null}
 			</CollapsibleContent>

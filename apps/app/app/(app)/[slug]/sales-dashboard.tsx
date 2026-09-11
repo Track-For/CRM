@@ -1,13 +1,11 @@
 "use client";
 
-import {
-	Card,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@crm/ui/components/card";
 import type { ChartConfig } from "@crm/ui/components/chart";
-import { DashboardRow, StatGroup } from "@crm/ui/components/dashboard";
+import {
+	ChartCard,
+	DashboardRow,
+	StatGroup,
+} from "@crm/ui/components/dashboard";
 import { StatCard, type StatDelta } from "@crm/ui/components/stat-card";
 import {
 	formatCount,
@@ -16,7 +14,6 @@ import {
 	formatPercent,
 } from "@crm/ui/lib/format";
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { AreaTrend, DonutStat } from "@/components/dashboard-charts";
 import { dealStageColor, dealStageLabel } from "@/lib/deal-stage";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -25,8 +22,8 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 type Summary = RouterOutputs["dashboard"]["summary"];
 
 const TREND_CONFIG: ChartConfig = {
-	won: { label: "Closed won", color: "var(--success)" },
-	created: { label: "New pipeline", color: "var(--chart-1)" },
+	won: { label: "Fechado ganho", color: "var(--success)" },
+	created: { label: "Novo pipeline", color: "var(--chart-2)" },
 };
 
 function changeDelta(
@@ -81,22 +78,22 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 		<div className="flex flex-col gap-6">
 			<StatGroup>
 				<StatCard
-					label="Closed won this month"
+					label="Fechado ganho este mês"
 					value={money(wonThisMonth.valueCents)}
 					delta={changeDelta(
 						wonThisMonth.valueCents,
 						wonPrevMonth.valueCents,
-						"vs. last month",
+						"vs. mês passado",
 					)}
-					description={`${formatCount(wonThisMonth.count, "deal")} · ${money(wonPrevMonth.valueCents)} last month`}
+					description={`${formatCount(wonThisMonth.count, "negócio")} · ${money(wonPrevMonth.valueCents)} no mês passado`}
 				/>
 				<StatCard
-					label="Open pipeline"
+					label="Pipeline aberto"
 					value={money(pipeline.totalCents)}
-					description={`${formatCount(pipeline.totalDeals, "deal")} in progress · ${money(closingThisMonthTotal.valueCents)} due this month`}
+					description={`${formatCount(pipeline.totalDeals, "negócio")} em andamento · ${money(closingThisMonthTotal.valueCents)} previstos para este mês`}
 				/>
 				<StatCard
-					label={`Win rate (${performance.windowDays}d)`}
+					label={`Taxa de vitória (${performance.windowDays}d)`}
 					value={
 						performance.winRate === null
 							? "—"
@@ -104,12 +101,12 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					}
 					description={
 						performance.wins + performance.losses === 0
-							? "Nothing has closed yet"
-							: `${performance.wins} won · ${performance.losses} lost`
+							? "Nada foi fechado ainda"
+							: `${performance.wins} ganhos · ${performance.losses} perdidos`
 					}
 				/>
 				<StatCard
-					label={`Average deal (${performance.windowDays}d)`}
+					label={`Negócio médio (${performance.windowDays}d)`}
 					value={
 						performance.avgDealCents === null
 							? "—"
@@ -117,34 +114,33 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					}
 					description={
 						performance.avgCycleDays === null
-							? "No wins to measure"
-							: `${performance.avgCycleDays}-day average cycle`
+							? "Nenhuma vitória para medir"
+							: `Ciclo médio de ${performance.avgCycleDays} dias`
 					}
 				/>
 			</StatGroup>
 
 			{unconverted.count > 0 ? (
 				<p className="text-muted-foreground text-xs">
-					Every figure above is in {reportingCurrency}.{" "}
-					{formatCount(unconverted.count, "deal")} in{" "}
+					Todos os valores acima estão em {reportingCurrency}.{" "}
+					{formatCount(unconverted.count, "negócio")} em{" "}
 					{unconverted.currencies.join(", ")}{" "}
-					{unconverted.count === 1 ? "is" : "are"} not included — there is no
-					rate to convert {unconverted.currencies.length === 1 ? "it" : "them"}{" "}
-					with.{" "}
+					{unconverted.count === 1 ? "não entra" : "não entram"} no total —
+					falta taxa de câmbio.{" "}
 					<Link
 						href={workspaceUrl("/settings/currencies")}
 						className="underline hover:no-underline"
 					>
-						Set one
+						Definir taxa
 					</Link>
 					.
 				</p>
 			) : null}
 
 			<DashboardRow split="hero">
-				<ChartPanel
-					title="Closed won vs. new pipeline"
-					description="Last six months, by the month a deal closed or was created"
+				<ChartCard
+					title="Fechado ganho vs. novo pipeline"
+					description="Últimos seis meses, pelo mês em que o negócio foi fechado ou criado"
 				>
 					{hasTrend ? (
 						<div className="flex flex-1 flex-col justify-center py-4">
@@ -153,20 +149,20 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 								config={TREND_CONFIG}
 								xKey="month"
 								height={196}
-								variant="gradient"
-								bloom="high"
+								variant="solid"
+								bloom="off"
 								showLegend
 								formatValue={exact}
 							/>
 						</div>
 					) : (
-						<EmptyChart label="No deals closed or created yet" />
+						<EmptyChart label="Nenhum negócio fechado ou criado ainda" />
 					)}
-				</ChartPanel>
+				</ChartCard>
 
-				<ChartPanel
-					title="Open pipeline by stage"
-					description="Where the value sits right now"
+				<ChartCard
+					title="Pipeline aberto por etapa"
+					description="Onde o valor está agora"
 				>
 					{stageSlices.length > 0 ? (
 						<div className="flex flex-1 flex-col justify-between gap-1 pt-4">
@@ -174,7 +170,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 								data={stageSlices}
 								height={168}
 								centerValue={money(pipeline.totalCents)}
-								centerLabel="open"
+								centerLabel="aberto"
 								formatValue={exact}
 							/>
 							<ul className="flex flex-col px-5 pb-1 md:px-6">
@@ -204,31 +200,11 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 							</ul>
 						</div>
 					) : (
-						<EmptyChart label="Nothing open" />
+						<EmptyChart label="Nada em aberto" />
 					)}
-				</ChartPanel>
+				</ChartCard>
 			</DashboardRow>
 		</div>
-	);
-}
-
-function ChartPanel({
-	title,
-	description,
-	children,
-}: {
-	title: string;
-	description?: string;
-	children: ReactNode;
-}) {
-	return (
-		<Card className="min-w-0">
-			<CardHeader>
-				<CardTitle>{title}</CardTitle>
-				{description ? <CardDescription>{description}</CardDescription> : null}
-			</CardHeader>
-			<div className="flex flex-1 flex-col border">{children}</div>
-		</Card>
 	);
 }
 

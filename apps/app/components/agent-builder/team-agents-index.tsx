@@ -11,6 +11,15 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 type Agents = RouterOutputs["agents"]["list"];
 
+const STATUS_LABELS = {
+	DRAFT: "rascunho",
+	DEPLOYING: "publicando",
+	LIVE: "ativo",
+	PAUSED: "pausado",
+	ARCHIVED: "arquivado",
+	DELETED: "excluído",
+} satisfies Record<string, string>;
+
 export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 	const trpc = useTRPC();
 	const workspaceUrl = useWorkspaceUrl();
@@ -40,18 +49,18 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 										{agent.name}
 									</span>
 									<span className="shrink-0 text-muted-foreground text-xs">
-										{agent.status.toLowerCase()}
+										{STATUS_LABELS[agent.status] ?? agent.status.toLowerCase()}
 									</span>
 								</span>
 								<span className="mt-1 block wrap-break-word text-muted-foreground text-xs sm:mt-0 sm:truncate">
-									{agent.description ?? "No description"}
+									{agent.description ?? "Sem descrição"}
 								</span>
 								<span className="mt-2 block font-mono text-muted-foreground text-xs sm:hidden">
-									{agent.runCount} runs
+									{agent.runCount} execuções
 								</span>
 							</span>
 							<span className="hidden shrink-0 font-mono text-muted-foreground text-xs sm:inline">
-								{agent.runCount} runs
+								{agent.runCount} execuções
 							</span>
 							<Icon
 								icon={ArrowRight}
@@ -63,16 +72,18 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 			) : (
 				<div className="flex min-h-64 flex-col items-center justify-center rounded-lg border border-dashed px-6 text-center">
 					<Icon icon={Bot} className="size-6 text-muted-foreground" />
-					<h2 className="mt-4 font-medium text-sm">No team agents yet</h2>
+					<h2 className="mt-4 font-medium text-sm">
+						Ainda não há agentes da equipe
+					</h2>
 					<p className="mt-1 text-muted-foreground text-xs">
-						Create one from a private chat, then review its access before
-						deploying it.
+						Crie um a partir de um chat privado, depois revise seu acesso antes
+						de publicá-lo.
 					</p>
 					<Link
 						href={workspaceUrl("/chat")}
 						className="mt-4 text-primary text-xs hover:underline"
 					>
-						Open chat
+						Abrir chat
 					</Link>
 				</div>
 			)}

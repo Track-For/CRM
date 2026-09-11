@@ -39,26 +39,31 @@ export function AppHeader({ user }: { user: User }) {
 	const label = workspaceLabel(workspace.data?.name);
 
 	return (
-		<header className="flex h-12 shrink-0 items-center gap-2 border-b px-3 [view-transition-name:app-header]">
+		<header className="flex h-14 shrink-0 items-center gap-3 border-b bg-background px-3 md:px-4 [view-transition-name:app-header]">
 			<div className="flex shrink-0 items-center gap-1">
 				<Button
 					variant="ghost"
 					size="icon"
 					className="md:hidden"
-					aria-label="Open navigation"
+					aria-label="Abrir navegação"
 					onClick={() => setMobileNavOpen(true)}
 				>
 					<Menu />
 				</Button>
 				<Link
 					href={workspaceUrl()}
-					aria-label="Homepage"
-					className="hidden size-8 items-center justify-center text-foreground md:flex"
+					aria-label="Página inicial da Comp AI"
+					className="hidden items-center gap-2 text-foreground md:flex"
 				>
-					<Logo className="size-5" />
+					<Logo className="size-6" />
+					<span className="font-heading font-semibold text-sm tracking-tight">
+						Comp AI
+					</span>
 				</Link>
-				<Separator orientation="vertical" className="mx-1 h-5 bg-transparent" />
-				<span className="min-w-0 truncate font-medium text-sm">{label}</span>
+				<Separator orientation="vertical" className="mx-2 h-5" />
+				<span className="min-w-0 truncate font-medium text-muted-foreground text-sm">
+					{label}
+				</span>
 			</div>
 
 			<div className="ml-auto flex shrink-0 items-center gap-1.5">
@@ -67,7 +72,7 @@ export function AppHeader({ user }: { user: User }) {
 					user={user}
 					onSignOut={() => {
 						signOutAndRedirect().catch(() =>
-							toast.error("Could not sign out."),
+							toast.error("Não foi possível sair."),
 						);
 					}}
 				/>
@@ -79,14 +84,17 @@ export function AppHeader({ user }: { user: User }) {
 export function AppHeaderFallback() {
 	return (
 		<header
-			className="flex h-12 shrink-0 items-center gap-2 border-b px-3 [view-transition-name:app-header]"
+			className="flex h-14 shrink-0 items-center gap-3 border-b bg-background px-3 md:px-4 [view-transition-name:app-header]"
 			aria-busy="true"
 		>
 			<div className="flex shrink-0 items-center gap-1">
-				<span className="hidden size-8 items-center justify-center text-foreground md:flex">
-					<Logo className="size-5" />
+				<span className="hidden items-center gap-2 text-foreground md:flex">
+					<Logo className="size-6" />
+					<span className="font-heading font-semibold text-sm tracking-tight">
+						Comp AI
+					</span>
 				</span>
-				<Separator orientation="vertical" className="mx-1 h-5 bg-transparent" />
+				<Separator orientation="vertical" className="mx-2 h-5" />
 				<Skeleton className="h-4 w-24" />
 			</div>
 
@@ -96,7 +104,7 @@ export function AppHeaderFallback() {
 				</Avatar>
 			</div>
 			<span role="status" className="sr-only">
-				Loading workspace header…
+				Carregando cabeçalho do workspace…
 			</span>
 		</header>
 	);
@@ -112,7 +120,7 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 				<Button
 					variant="ghost"
 					size="icon"
-					aria-label="Account menu"
+					aria-label="Menu da conta"
 					className="hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent"
 				>
 					<Avatar className="size-7">
@@ -136,12 +144,12 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 					}}
 				>
 					{isDark ? <Light /> : <Asleep />}
-					{isDark ? "Light mode" : "Dark mode"}
+					{isDark ? "Modo claro" : "Modo escuro"}
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={onSignOut}>
 					<Logout />
-					Sign out
+					Sair
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

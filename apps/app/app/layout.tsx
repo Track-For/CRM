@@ -3,7 +3,7 @@ import { Toaster } from "@crm/ui/components/sonner";
 import { TooltipProvider } from "@crm/ui/components/tooltip";
 import { cn } from "@crm/ui/lib/utils";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { LocalDateTimeHydrator } from "@/components/local-date-time";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -19,12 +19,18 @@ const fontMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
+const fontHeading = Poppins({
+	variable: "--font-poppins",
+	weight: ["500", "600", "700"],
+	subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
 	title: {
 		default: "Comp AI - CRM",
 		template: "%s · Comp AI CRM",
 	},
-	description: "Customer Relationship Management for Comp AI",
+	description: "Gestão de relacionamento com o cliente para a Comp AI",
 	icons: {
 		icon: [
 			{ url: "/favicon.svg", type: "image/svg+xml" },
@@ -42,9 +48,14 @@ export default function RootLayout({
 }>) {
 	return (
 		<html
-			lang="en"
+			lang="pt-BR"
 			suppressHydrationWarning
-			className={cn(fontSans.variable, fontMono.variable, "h-full antialiased")}
+			className={cn(
+				fontSans.variable,
+				fontMono.variable,
+				fontHeading.variable,
+				"h-full antialiased",
+			)}
 		>
 			<body className="flex min-h-full flex-col font-sans">
 				<NuqsAdapter>

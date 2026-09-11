@@ -27,40 +27,40 @@ const COPY: RecordCopyByKind = {
 	contact: {
 		header: "x-crm-contact",
 		field: "contactId",
-		title: "Ask about this person",
+		title: "Pergunte sobre esta pessoa",
 		blurb:
-			"Every step is shown as it happens — including the leads it throws away.",
-		placeholder: "Are they still there?",
+			"Cada etapa é mostrada conforme acontece — incluindo os leads que ele descarta.",
+		placeholder: "Ainda está por aqui?",
 		suggestions: [
-			"Who is this person?",
-			"Are they still there?",
-			"What should I know before a call?",
+			"Quem é essa pessoa?",
+			"Ainda está por aqui?",
+			"O que devo saber antes de uma ligação?",
 		],
 	},
 	company: {
 		header: "x-crm-company",
 		field: "companyId",
-		title: "Ask about this company",
+		title: "Pergunte sobre esta empresa",
 		blurb:
-			"It reads their site and our own history with them, and shows its working.",
-		placeholder: "What do they sell?",
+			"Ele lê o site deles e o nosso histórico com eles, e mostra o raciocínio.",
+		placeholder: "O que eles vendem?",
 		suggestions: [
-			"What do they do?",
-			"Who do we know here?",
-			"What has changed recently?",
+			"O que eles fazem?",
+			"Quem conhecemos aqui?",
+			"O que mudou recentemente?",
 		],
 	},
 	deal: {
 		header: "x-crm-deal",
 		field: "dealId",
-		title: "Ask about this deal",
+		title: "Pergunte sobre este negócio",
 		blurb:
-			"It can read the thread, the meetings and the people on both sides of it.",
-		placeholder: "Where has this stalled?",
+			"Ele pode ler a conversa, as reuniões e as pessoas dos dois lados dela.",
+		placeholder: "Onde isso empacou?",
 		suggestions: [
-			"Where does this stand?",
-			"Who else should be involved?",
-			"What is the risk here?",
+			"Como está esse negócio?",
+			"Quem mais deveria estar envolvido?",
+			"Qual é o risco aqui?",
 		],
 	},
 };

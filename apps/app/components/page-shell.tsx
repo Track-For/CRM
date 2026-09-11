@@ -14,14 +14,14 @@ function PageShell({
 			<main
 				data-slot="page-shell-scroll"
 				className={cn(
-					"flex min-w-0 flex-1 flex-col px-4 pt-4 pb-4 md:px-6 md:pt-6 md:pb-6",
+					"flex min-w-0 flex-1 flex-col bg-canvas px-4 py-5 md:px-6 md:py-6 xl:px-8 xl:py-7",
 					contained ? "min-h-0 overflow-hidden" : "overflow-y-auto",
 				)}
 			>
 				<div
 					data-slot="page-shell"
 					className={cn(
-						"mx-auto flex w-full min-w-0 max-w-7xl flex-1 flex-col gap-6",
+						"mx-auto flex w-full min-w-0 max-w-app flex-1 flex-col gap-7",
 						className,
 					)}
 					{...props}
@@ -40,7 +40,7 @@ function PageShellHeader({
 		<header
 			data-slot="page-shell-header"
 			className={cn(
-				"flex flex-col gap-3 [view-transition-name:page-header]",
+				"flex flex-col gap-3 pb-1 [view-transition-name:page-header]",
 				className,
 			)}
 			{...props}
@@ -70,7 +70,7 @@ function PageShellTitle({ className, ...props }: React.ComponentProps<"h1">) {
 		<h1
 			data-slot="page-shell-title"
 			className={cn(
-				"col-start-1 row-start-1 min-w-0 self-center text-balance font-medium text-2xl tracking-tight md:text-3xl",
+				"col-start-1 row-start-1 min-w-0 self-center text-balance font-heading font-semibold text-2xl tracking-tight md:text-3xl",
 				className,
 			)}
 			{...props}
@@ -86,7 +86,7 @@ function PageShellDescription({
 		<p
 			data-slot="page-shell-description"
 			className={cn(
-				"col-span-full row-start-2 text-balance text-muted-foreground text-sm",
+				"col-span-full row-start-2 max-w-2xl text-pretty text-muted-foreground text-sm/relaxed",
 				className,
 			)}
 			{...props}
@@ -119,7 +119,7 @@ function PageShellContent({
 		<div
 			data-slot="page-shell-content"
 			className={cn(
-				"@container/page-content flex flex-1 flex-col gap-6",
+				"@container/page-content flex flex-1 flex-col gap-7",
 				className,
 			)}
 			{...props}
@@ -152,7 +152,7 @@ function PageShellFallback() {
 				</div>
 			</div>
 			<span role="status" className="sr-only">
-				Loading page…
+				Carregando página…
 			</span>
 		</PageShell>
 	);

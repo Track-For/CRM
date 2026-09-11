@@ -9,7 +9,10 @@ function StatGroup({
 	return (
 		<div
 			data-slot="stat-group"
-			className={cn("@container/stats overflow-hidden border", className)}
+			className={cn(
+				"@container/stats overflow-hidden rounded-lg border bg-card shadow-xs",
+				className,
+			)}
 			{...props}
 		>
 			<div
@@ -40,7 +43,7 @@ function DashboardGrid({
 		<div className="@container/dashboard">
 			<div
 				data-slot="dashboard-grid"
-				className={cn("grid grid-cols-1 gap-4", GRID_COLS[columns], className)}
+				className={cn("grid grid-cols-1 gap-5", GRID_COLS[columns], className)}
 				{...props}
 			/>
 		</div>
@@ -57,7 +60,7 @@ function DashboardRow({
 			<div
 				data-slot="dashboard-row"
 				className={cn(
-					"grid grid-cols-1 gap-4",
+					"grid grid-cols-1 gap-5",
 					split === "hero"
 						? "@3xl/dashboard:grid-cols-[2fr_1fr]"
 						: "@3xl/dashboard:grid-cols-2",
@@ -86,17 +89,22 @@ function ChartCard({
 	return (
 		<div
 			data-slot="chart-card"
-			className={cn("flex flex-col border", className)}
+			className={cn(
+				"flex min-w-0 flex-col overflow-hidden rounded-lg border bg-card shadow-xs",
+				className,
+			)}
 			{...props}
 		>
 			{title || description || action ? (
-				<div className="flex items-start justify-between gap-4 p-5 md:p-6">
+				<div className="flex items-start justify-between gap-4 p-4 md:p-5">
 					<div className="flex min-w-0 flex-col gap-1">
 						{title ? (
-							<h3 className="truncate font-medium text-sm">{title}</h3>
+							<h2 className="text-pretty font-heading font-semibold text-base tracking-tight">
+								{title}
+							</h2>
 						) : null}
 						{description ? (
-							<p className="text-muted-foreground text-xs/relaxed">
+							<p className="max-w-2xl text-pretty text-muted-foreground text-sm/relaxed">
 								{description}
 							</p>
 						) : null}
@@ -104,7 +112,7 @@ function ChartCard({
 					{action ? <div className="shrink-0">{action}</div> : null}
 				</div>
 			) : null}
-			<div className="flex flex-1 flex-col justify-center pb-5 md:pb-6">
+			<div className="flex flex-1 flex-col justify-center border-t">
 				{children}
 			</div>
 			{footer ? (
@@ -127,10 +135,13 @@ function KpiCard({
 	return (
 		<div
 			data-slot="kpi-card"
-			className={cn("flex flex-col gap-4 border p-5 md:p-6", className)}
+			className={cn(
+				"flex flex-col gap-4 rounded-lg border bg-card p-4 shadow-xs md:p-5",
+				className,
+			)}
 			{...props}
 		>
-			<h3 className="truncate font-medium text-muted-foreground text-sm">
+			<h3 className="truncate font-heading font-medium text-muted-foreground text-sm">
 				{title}
 			</h3>
 			{children}
@@ -154,14 +165,16 @@ function DashboardSection({
 	return (
 		<section
 			data-slot="dashboard-section"
-			className={cn("flex flex-col gap-4", className)}
+			className={cn("flex flex-col gap-5", className)}
 			{...props}
 		>
 			{hasHeader ? (
 				<div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
 					<div className="flex flex-col gap-1">
 						{title ? (
-							<h2 className="font-medium text-base tracking-tight">{title}</h2>
+							<h2 className="font-heading font-semibold text-lg tracking-tight">
+								{title}
+							</h2>
 						) : null}
 						{description ? (
 							<p className="text-muted-foreground text-sm">{description}</p>

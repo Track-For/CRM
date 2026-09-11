@@ -22,7 +22,7 @@ import { loadDealViewSearchParams } from "./deals-view-search-params";
 import { DealsViewToggle, DealsViewToggleFallback } from "./deals-view-toggle";
 
 export const metadata: Metadata = {
-	title: "Deals",
+	title: "Negócios",
 };
 
 export default function DealsPage({
@@ -32,9 +32,9 @@ export default function DealsPage({
 		<PageShell className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>Deals</PageShellTitle>
+					<PageShellTitle>Negócios</PageShellTitle>
 					<PageShellDescription>
-						The pipeline, and everything that has already closed.
+						O pipeline, e tudo que já foi encerrado.
 					</PageShellDescription>
 				</PageShellHeading>
 				<PageShellActions>

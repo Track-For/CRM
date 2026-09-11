@@ -72,7 +72,7 @@ function StatCard({
 	return (
 		<div
 			data-slot="stat-card"
-			className={cn("flex flex-col gap-2.5 p-4 md:p-6", className)}
+			className={cn("flex flex-col gap-2.5 p-4 md:p-5", className)}
 			{...props}
 		>
 			{label != null ? (
@@ -81,13 +81,13 @@ function StatCard({
 				</span>
 			) : null}
 			<div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-				<span className="font-medium text-3xl tracking-tight tabular-nums">
+				<span className="font-heading font-semibold text-3xl tracking-tight tabular-nums">
 					{value}
 				</span>
 				{delta ? <StatDeltaText delta={delta} /> : null}
 			</div>
 			{description ? (
-				<p className="text-pretty text-muted-foreground text-xs/relaxed">
+				<p className="text-pretty text-muted-foreground text-sm/relaxed">
 					{description}
 				</p>
 			) : null}
