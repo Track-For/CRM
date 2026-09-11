@@ -24,12 +24,12 @@ export function DealsViewToggleFallback() {
 			size="sm"
 			spacing={0}
 			disabled
-			aria-label="Deals view"
+			aria-label="Visualização de negócios"
 		>
-			<ToggleGroupItem value="table" aria-label="Table view">
+			<ToggleGroupItem value="table" aria-label="Visualização em tabela">
 				<Icon icon={List} />
 			</ToggleGroupItem>
-			<ToggleGroupItem value="board" aria-label="Board view">
+			<ToggleGroupItem value="board" aria-label="Visualização em quadro">
 				<Icon icon={Column} />
 			</ToggleGroupItem>
 		</ToggleGroup>
@@ -52,12 +52,12 @@ export function DealsViewToggle() {
 			onValueChange={(next) => {
 				if (isView(next)) void setView(next);
 			}}
-			aria-label="Deals view"
+			aria-label="Visualização de negócios"
 		>
-			<ToggleGroupItem value="table" aria-label="Table view">
+			<ToggleGroupItem value="table" aria-label="Visualização em tabela">
 				<Icon icon={List} />
 			</ToggleGroupItem>
-			<ToggleGroupItem value="board" aria-label="Board view">
+			<ToggleGroupItem value="board" aria-label="Visualização em quadro">
 				<Icon icon={Column} />
 			</ToggleGroupItem>
 		</ToggleGroup>

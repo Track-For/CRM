@@ -47,7 +47,7 @@ export function SimpleTable({
 }: {
 	columns: SimpleTableColumn[];
 	children: ReactNode;
-	variant?: "default" | "panel";
+	variant?: "default" | "embedded" | "panel";
 	surface?: keyof typeof PANEL_SURFACE;
 	className?: string;
 	containerClassName?: string;
@@ -56,13 +56,15 @@ export function SimpleTable({
 	headerHeight?: string;
 }) {
 	const panel = variant === "panel";
+	const embedded = variant === "embedded";
 
 	return (
 		<Table
 			className={cn("w-full", panel && "table-fixed", className)}
 			containerClassName={cn(
 				panel && "min-h-0 flex-1 overflow-x-hidden overflow-y-auto",
-				!panel && "rounded-lg border bg-card",
+				variant === "default" && "rounded-lg border bg-card shadow-xs",
+				embedded && "border-t bg-card",
 				containerClassName,
 			)}
 		>
@@ -81,7 +83,7 @@ export function SimpleTable({
 							aria-label={column.header ? undefined : column.srLabel}
 							className={cn(
 								headerHeight ?? "h-9",
-								"px-3 font-normal text-muted-foreground",
+						"px-3 font-medium text-muted-foreground",
 								column.width,
 								ALIGN_CLASS[column.align ?? "left"],
 								column.className,

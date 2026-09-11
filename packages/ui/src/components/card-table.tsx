@@ -17,6 +17,7 @@ export function CardTable({
 }) {
 	return (
 		<SimpleTable
+			variant="embedded"
 			className="min-w-[48rem] table-fixed [&_td:first-child]:pl-4 [&_td:last-child]:pr-4 [&_th:first-child]:pl-4 [&_th:last-child]:pr-4"
 			columns={columns}
 		>
@@ -27,7 +28,7 @@ export function CardTable({
 
 export function CardTableEmpty({ children }: { children: ReactNode }) {
 	return (
-		<p className="border-t py-6 text-center text-muted-foreground text-xs">
+		<p className="border-t px-5 py-10 text-center text-muted-foreground text-sm">
 			{children}
 		</p>
 	);

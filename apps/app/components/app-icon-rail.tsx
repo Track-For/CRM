@@ -21,7 +21,6 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
-import { cn } from "@crm/ui/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -40,7 +39,7 @@ type RailItem = {
 };
 
 const ITEMS: RailItem[] = [
-	{ title: "Overview", href: "/", icon: Dashboard, match: "exact" },
+	{ title: "Visão geral", href: "/", icon: Dashboard, match: "exact" },
 	{
 		title: "Chat",
 		href: "/chat",
@@ -49,15 +48,20 @@ const ITEMS: RailItem[] = [
 		match: "prefix",
 		related: ["/agents"],
 	},
-	{ title: "Companies", href: "/companies", icon: Building, match: "prefix" },
+	{ title: "Empresas", href: "/companies", icon: Building, match: "prefix" },
 	{
-		title: "Contacts",
+		title: "Contatos",
 		href: "/contacts",
 		icon: UserMultiple,
 		match: "prefix",
 	},
-	{ title: "Deals", href: "/deals", icon: Partnership, match: "prefix" },
-	{ title: "Settings", href: "/settings", icon: Settings, match: "prefix" },
+	{ title: "Negócios", href: "/deals", icon: Partnership, match: "prefix" },
+	{
+		title: "Configurações",
+		href: "/settings",
+		icon: Settings,
+		match: "prefix",
+	},
 ];
 
 function isActive(item: RailItem, pathname: string): boolean {
@@ -72,37 +76,41 @@ function RailLink({
 	item,
 	active,
 	onPrefetch,
+	compact = false,
 }: {
 	item: RailItem;
 	active: boolean;
 	onPrefetch: () => void;
+	compact?: boolean;
 }) {
+	const control = (
+		<Button
+			asChild
+			variant="navigation"
+			size={compact ? "icon" : "navigation"}
+			data-active={active}
+		>
+			<Link
+				href={item.href}
+				prefetch
+				onMouseEnter={onPrefetch}
+				onFocus={onPrefetch}
+				aria-current={active ? "page" : undefined}
+				transitionTypes={["nav-lateral"]}
+			>
+				<Icon icon={item.icon} className={item.iconClassName} />
+				<span className={compact ? "sr-only" : "min-w-0 truncate"}>
+					{item.title}
+				</span>
+			</Link>
+		</Button>
+	);
+
+	if (!compact) return control;
+
 	return (
 		<Tooltip>
-			<TooltipTrigger asChild>
-				<Button
-					asChild
-					variant="ghost"
-					size="icon"
-					className={cn(
-						"text-muted-foreground",
-						active &&
-							"bg-muted text-foreground hover:bg-muted hover:text-foreground",
-					)}
-				>
-					<Link
-						href={item.href}
-						prefetch
-						onMouseEnter={onPrefetch}
-						onFocus={onPrefetch}
-						aria-current={active ? "page" : undefined}
-						transitionTypes={["nav-lateral"]}
-					>
-						<Icon icon={item.icon} className={item.iconClassName} />
-						<span className="sr-only">{item.title}</span>
-					</Link>
-				</Button>
-			</TooltipTrigger>
+			<TooltipTrigger asChild>{control}</TooltipTrigger>
 			<TooltipContent side="right">{item.title}</TooltipContent>
 		</Tooltip>
 	);
@@ -120,15 +128,7 @@ function MobileRailLink({
 	onPrefetch: () => void;
 }) {
 	return (
-		<Button
-			asChild
-			variant="ghost"
-			className={cn(
-				"justify-start gap-3 text-muted-foreground",
-				active &&
-					"bg-muted text-foreground hover:bg-muted hover:text-foreground",
-			)}
-		>
+		<Button asChild variant="navigation" size="navigation" data-active={active}>
 			<Link
 				href={item.href}
 				prefetch
@@ -159,16 +159,7 @@ function MobileRailIconLink({
 	onPrefetch: () => void;
 }) {
 	return (
-		<Button
-			asChild
-			variant="ghost"
-			size="icon"
-			className={cn(
-				"text-muted-foreground",
-				active &&
-					"bg-muted text-foreground hover:bg-muted hover:text-foreground",
-			)}
-		>
+		<Button asChild variant="navigation" size="icon" data-active={active}>
 			<Link
 				href={item.href}
 				prefetch
@@ -186,24 +177,37 @@ function MobileRailIconLink({
 
 export function AppIconRailFallback() {
 	return (
-		<nav
-			aria-label="Primary"
-			aria-busy="true"
-			className="hidden w-14 shrink-0 flex-col items-center gap-1 border-r py-3 md:flex [view-transition-name:app-rail]"
-		>
-			{ITEMS.map((item) => (
-				<Button
-					key={item.href}
-					variant="ghost"
-					size="icon"
-					disabled
-					className="text-muted-foreground"
-				>
-					<Icon icon={item.icon} className={item.iconClassName} />
-					<span className="sr-only">{item.title}</span>
-				</Button>
-			))}
-		</nav>
+		<>
+			<nav
+				aria-label="Principal"
+				aria-busy="true"
+				className="hidden w-16 shrink-0 flex-col items-center gap-1 border-r bg-sidebar p-2 md:flex xl:hidden [view-transition-name:app-rail]"
+			>
+				{ITEMS.map((item) => (
+					<Button key={item.href} variant="navigation" size="icon" disabled>
+						<Icon icon={item.icon} className={item.iconClassName} />
+						<span className="sr-only">{item.title}</span>
+					</Button>
+				))}
+			</nav>
+			<nav
+				aria-label="Principal"
+				aria-busy="true"
+				className="hidden w-56 shrink-0 flex-col gap-1 border-r bg-sidebar p-3 xl:flex [view-transition-name:app-rail]"
+			>
+				{ITEMS.map((item) => (
+					<Button
+						key={item.href}
+						variant="navigation"
+						size="navigation"
+						disabled
+					>
+						<Icon icon={item.icon} className={item.iconClassName} />
+						<span>{item.title}</span>
+					</Button>
+				))}
+			</nav>
+		</>
 	);
 }
 
@@ -230,8 +234,8 @@ export function AppIconRail() {
 	return (
 		<>
 			<nav
-				aria-label="Primary"
-				className="hidden w-14 shrink-0 flex-col items-center gap-1 border-r py-3 md:flex [view-transition-name:app-rail]"
+				aria-label="Principal"
+				className="hidden w-16 shrink-0 flex-col items-center gap-1 border-r bg-sidebar p-2 md:flex xl:hidden [view-transition-name:app-rail]"
 			>
 				{items.map((item) => (
 					<RailLink
@@ -239,8 +243,35 @@ export function AppIconRail() {
 						item={item}
 						active={isActive(item, pathname)}
 						onPrefetch={() => prefetchSection(item.section)}
+						compact
 					/>
 				))}
+			</nav>
+			<nav
+				aria-label="Principal"
+				className="hidden w-56 shrink-0 flex-col gap-1 border-r bg-sidebar p-3 xl:flex [view-transition-name:app-rail]"
+			>
+				<p className="px-3 pt-1 pb-2 font-medium text-muted-foreground text-xs">
+					Workspace
+				</p>
+				{items.slice(0, -1).map((item) => (
+					<RailLink
+						key={item.href}
+						item={item}
+						active={isActive(item, pathname)}
+						onPrefetch={() => prefetchSection(item.section)}
+					/>
+				))}
+				<div className="mt-auto border-t pt-2">
+					{items.slice(-1).map((item) => (
+						<RailLink
+							key={item.href}
+							item={item}
+							active={isActive(item, pathname)}
+							onPrefetch={() => prefetchSection(item.section)}
+						/>
+					))}
+				</div>
 			</nav>
 
 			<Sheet open={open} onOpenChange={setOpen}>
@@ -248,19 +279,19 @@ export function AppIconRail() {
 					<SheetContent
 						side="left"
 						showCloseButton={false}
-						className="w-5/6 max-w-sm flex-row gap-0 p-0"
+						className="w-5/6 max-w-md flex-row gap-0 p-0"
 					>
 						<SheetHeader className="sr-only">
-							<SheetTitle>Navigation and agent chats</SheetTitle>
+							<SheetTitle>Navegação e conversas dos agentes</SheetTitle>
 						</SheetHeader>
 						<nav
-							aria-label="Primary"
-							className="flex w-14 shrink-0 flex-col items-center gap-1 border-r py-3"
+							aria-label="Principal"
+							className="flex w-16 shrink-0 flex-col items-center gap-1 border-r bg-sidebar p-2"
 						>
 							<Button
 								variant="ghost"
 								size="icon"
-								aria-label="Close navigation"
+								aria-label="Fechar navegação"
 								onClick={() => setOpen(false)}
 							>
 								<Icon icon={Close} />
@@ -282,13 +313,13 @@ export function AppIconRail() {
 						/>
 					</SheetContent>
 				) : (
-					<SheetContent side="left" className="w-64 gap-0 p-0">
+					<SheetContent side="left" className="w-72 gap-0 p-0">
 						<SheetHeader>
-							<SheetTitle>Navigation</SheetTitle>
+							<SheetTitle>Navegação</SheetTitle>
 						</SheetHeader>
 						<nav
-							aria-label="Primary"
-							className="flex flex-1 flex-col gap-1 p-2"
+							aria-label="Principal"
+							className="flex flex-1 flex-col gap-1 bg-sidebar p-3"
 						>
 							{items.map((item) => (
 								<MobileRailLink

@@ -81,8 +81,8 @@ export function DealsBoard() {
 		<div className="flex min-h-0 flex-1 flex-col gap-2">
 			{total > rows.length ? (
 				<p className="text-muted-foreground text-xs">
-					Showing {rows.length} most recently active of {total} deals. Use the
-					table view to see the rest.
+					Mostrando os {rows.length} mais ativos recentemente de {total}{" "}
+					negócios. Use a visualização em tabela para ver o restante.
 				</p>
 			) : null}
 			<KanbanBoard

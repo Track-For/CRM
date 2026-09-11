@@ -22,7 +22,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
 function companies(count: number): string {
-	return formatCount(count, "company", "companies");
+	return formatCount(count, "empresa", "empresas");
 }
 
 export function CompaniesBulkActions({
@@ -45,7 +45,10 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkAssignOwner.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.company();
-				reportBulk(result, (count) => `${companies(count)} reassigned.`);
+				reportBulk(
+					result,
+					(count) => `Responsável atualizado: ${companies(count)}.`,
+				);
 				onDone();
 			},
 			onError,
@@ -58,7 +61,8 @@ export function CompaniesBulkActions({
 				await cache.company();
 				reportBulk(
 					result,
-					(count) => `Looking up ${companies(count)} — the table will update.`,
+					(count) =>
+						`Buscando dados de ${companies(count)} — a tabela vai atualizar.`,
 				);
 				onDone();
 			},
@@ -70,7 +74,7 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkArchive.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "company", ids: variables.ids });
-				reportBulk(result, (count) => `${companies(count)} archived.`);
+				reportBulk(result, (count) => `Arquivado: ${companies(count)}.`);
 				onDone();
 			},
 			onError,
@@ -81,7 +85,7 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkRestore.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.company();
-				reportBulk(result, (count) => `${companies(count)} restored.`);
+				reportBulk(result, (count) => `Restaurado: ${companies(count)}.`);
 				onDone();
 			},
 			onError,
@@ -92,7 +96,10 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkPurge.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "company", ids: variables.ids });
-				reportBulk(result, (count) => `${companies(count)} deleted forever.`);
+				reportBulk(
+					result,
+					(count) => `Excluído para sempre: ${companies(count)}.`,
+				);
 				setConfirming(false);
 				onDone();
 			},
@@ -109,7 +116,7 @@ export function CompaniesBulkActions({
 					<DropdownMenuGroup>
 						<DropdownMenuItem onSelect={() => restore.mutate({ ids })}>
 							<Undo />
-							Restore
+							Restaurar
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
@@ -118,7 +125,7 @@ export function CompaniesBulkActions({
 							variant="destructive"
 							onSelect={() => setConfirming(true)}
 						>
-							Delete forever
+							Excluir para sempre
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 				</BulkActionsMenu>
@@ -126,8 +133,8 @@ export function CompaniesBulkActions({
 				<BulkDeleteDialog
 					open={confirming}
 					onOpenChange={setConfirming}
-					title={`Delete ${companies(ids.length)} forever?`}
-					description="This cannot be undone."
+					title={`Excluir ${companies(ids.length)} para sempre?`}
+					description="Isso não pode ser desfeito."
 					onConfirm={() => purge.mutate({ ids })}
 				/>
 			</>
@@ -141,20 +148,20 @@ export function CompaniesBulkActions({
 		<BulkActionsMenu pending={pending}>
 			<BulkOwnerMenu
 				users={users.data ?? []}
-				unassignedLabel="Nobody"
+				unassignedLabel="Ninguém"
 				onSelect={(ownerId) => assignOwner.mutate({ ids, ownerId })}
 			/>
 			<DropdownMenuGroup>
 				<DropdownMenuItem onSelect={() => enrich.mutate({ ids })}>
 					<Renew />
-					Re-enrich
+					Reenriquecer
 				</DropdownMenuItem>
 			</DropdownMenuGroup>
 			<DropdownMenuSeparator />
 			<DropdownMenuGroup>
 				<DropdownMenuItem onSelect={() => archive.mutate({ ids })}>
 					<Archive />
-					Archive
+					Arquivar
 				</DropdownMenuItem>
 			</DropdownMenuGroup>
 		</BulkActionsMenu>
