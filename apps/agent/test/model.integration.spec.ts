@@ -83,8 +83,7 @@ describe.skipIf(!directOpenAI)("OPENAI_API_KEY set", () => {
 
 		const selected = await selectedModel();
 
-		expect(selected?.model).not.toBe("anthropic/claude-sonnet-5");
-		expect(typeof selected?.model).toBe("object");
+		expect(selected?.model).toMatchObject({ modelId: "gpt-4.1" });
 	});
 });
 
