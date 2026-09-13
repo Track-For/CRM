@@ -38,7 +38,9 @@ afterAll(async () => {
 	if (saved) await db.appSetting.create({ data: saved });
 });
 
-describe("the configured model", () => {
+const directOpenAI = Boolean(process.env.OPENAI_API_KEY);
+
+describe.skipIf(directOpenAI)("the configured model", () => {
 	it("falls back when nothing has ever been chosen", async () => {
 		const setting = await readAgentModel(db);
 
@@ -70,7 +72,22 @@ describe("the configured model", () => {
 		expect(await selectedModel()).toBeNull();
 		expect((await readAgentModel(db)).isDefault).toBe(true);
 	});
+});
 
+describe.skipIf(!directOpenAI)("OPENAI_API_KEY set", () => {
+	it("ignores the DB row and always returns the direct OpenAI model", async () => {
+		await writeAgentModel(db, {
+			id: "anthropic/claude-sonnet-5",
+			contextWindowTokens: 200_000,
+		});
+
+		const selected = await selectedModel();
+
+		expect(selected?.model).toMatchObject({ modelId: "gpt-4.1" });
+	});
+});
+
+describe("the configured model row", () => {
 	it("keeps one row rather than accumulating one per change", async () => {
 		await writeAgentModel(db, { id: "openai/gpt-5.5", contextWindowTokens: 1 });
 		await writeAgentModel(db, { id: "zai/glm-5.2", contextWindowTokens: 2 });
